@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="dataSourceStorage">
-  <data-source name="Django default" uuid="97453227-aa31-445c-9811-02b761a3c622">
+  <data-source name="db" uuid="c5f5a572-dcef-41dc-b7de-6387a9d8e9ba">
     <database-info product="SQLite" version="3.8.11" jdbc-version="2.1" driver-name="SQLiteJDBC" driver-version="native"/>
     <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed"/>
     <schema name="" catalog=""/>
@@ -111,6 +111,54 @@
       <column name="modified_date" sqlType="DATETIME" precision="0" scale="-1" nullable="false" jdbcType="12"/>
       <column name="is_active" sqlType="BOOL" precision="0" scale="-1" nullable="false" jdbcType="4"/>
       <primary-key columns="id"/>
+    </table>
+    <table name="icebreaker_backend_blocked" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
+      <column name="enroll" sqlType="VARCHAR(12)" precision="0" scale="-1" nullable="false" jdbcType="12"/>
+      <primary-key columns="id"/>
+    </table>
+    <table name="icebreaker_backend_contacts" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
+      <column name="enroll" sqlType="VARCHAR(12)" precision="0" scale="-1" nullable="false" jdbcType="12"/>
+      <primary-key columns="id"/>
+    </table>
+    <table name="icebreaker_backend_picture" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
+      <column name="picture" sqlType="VARCHAR(100)" precision="0" scale="-1" nullable="false" jdbcType="12"/>
+      <primary-key columns="id"/>
+    </table>
+    <table name="icebreaker_backend_user" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
+      <column name="enroll" sqlType="VARCHAR(12)" precision="0" scale="-1" nullable="false" jdbcType="12"/>
+      <column name="gender" sqlType="VARCHAR(6)" precision="0" scale="-1" nullable="false" jdbcType="12"/>
+      <column name="branch" sqlType="VARCHAR(20)" precision="0" scale="-1" nullable="false" jdbcType="12"/>
+      <column name="college" sqlType="VARCHAR(20)" precision="0" scale="-1" nullable="false" jdbcType="12"/>
+      <column name="picture_id" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
+      <primary-key columns="id"/>
+      <foreign-key name="#FAKE_icebreaker_backend_user_1" columns="picture_id" ref-table="icebreaker_backend_picture" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <index name="icebreaker_backend_user_c6fe9aa6" unique="true" columns="picture_id"/>
+    </table>
+    <table name="icebreaker_backend_user_blocked" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
+      <column name="user_id" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
+      <column name="blocked_id" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
+      <primary-key columns="id"/>
+      <foreign-key name="#FAKE_icebreaker_backend_user_blocked_1" columns="blocked_id" ref-table="icebreaker_backend_blocked" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <foreign-key name="#FAKE_icebreaker_backend_user_blocked_2" columns="user_id" ref-table="icebreaker_backend_user" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <index name="icebreaker_backend_user_blocked_12246edf" unique="true" columns="blocked_id"/>
+      <index name="icebreaker_backend_user_blocked_e8701ad4" unique="true" columns="user_id"/>
+      <index name="icebreaker_backend_user_blocked_user_id_a7127df1_uniq" unique="true" columns="user_id,blocked_id"/>
+    </table>
+    <table name="icebreaker_backend_user_contacts" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
+      <column name="user_id" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
+      <column name="contacts_id" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
+      <primary-key columns="id"/>
+      <foreign-key name="#FAKE_icebreaker_backend_user_contacts_1" columns="contacts_id" ref-table="icebreaker_backend_contacts" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <foreign-key name="#FAKE_icebreaker_backend_user_contacts_2" columns="user_id" ref-table="icebreaker_backend_user" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <index name="icebreaker_backend_user_contacts_9b742cc8" unique="true" columns="contacts_id"/>
+      <index name="icebreaker_backend_user_contacts_e8701ad4" unique="true" columns="user_id"/>
+      <index name="icebreaker_backend_user_contacts_user_id_f2b3b8f2_uniq" unique="true" columns="user_id,contacts_id"/>
     </table>
     <table name="sqlite_sequence" schema="" catalog="" type="TABLE">
       <column name="name" sqlType="" precision="0" scale="-1" nullable="true" jdbcType="12"/>
