@@ -100,6 +100,35 @@ def block_list(request):
                 data = block.enroll
                 print block.enroll
                 blocked.append(data)
-            return JsonResponse({'blocked' : blocked},safe=False)
+            return JsonResponse({'blocked': blocked}, safe=False)
         else:
             return JsonResponse({'status': 'error'})
+
+
+@csrf_exempt
+def random_chat(request):
+    if request.method == 'POST':
+        body = json.loads(request.body)
+        random = Random()
+        user = User.objects.get(enroll=body['enroll'])
+        print "kjjk"+user.gender
+        print type(user.gender)
+        if str(user.gender) == 'male':
+            data = random.get_female()
+            if str(data) == 'wait':
+                random.insert_male(body['enroll'])
+                return JsonResponse({'status': data})
+            else:
+                return JsonResponse({'status': data})
+        elif str(user.gender) == 'female':
+            data = random.get_male()
+            if str(data) == 'wait':
+                random.insert_female(body['enroll'])
+                return JsonResponse({'status': data})
+            else:
+                return JsonResponse({'status': data})
+        else:
+            return JsonResponse({'status': 'error'})
+
+    else:
+        return JsonResponse({'status': 'error'})

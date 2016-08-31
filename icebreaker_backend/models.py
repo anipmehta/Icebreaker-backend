@@ -18,7 +18,43 @@ class User(models.Model):
     gender = models.CharField(max_length=6)
     branch = models.CharField(max_length=20)
     college = models.CharField(max_length=20)
-    batch = models.CharField(max_length=4,default="B7")
-    picture = models.ForeignKey(Picture,null=True)
-    blocked = models.ManyToManyField(Blocked,blank=True)
-    contacts = models.ManyToManyField(Contacts,blank=True)
+    batch = models.CharField(max_length=4, default="B7")
+    picture = models.ForeignKey(Picture, null=True)
+    blocked = models.ManyToManyField(Blocked, blank=True)
+    contacts = models.ManyToManyField(Contacts, blank=True)
+
+
+class Random():
+    male = []
+    female = []
+
+    def __init__(self):
+        pass
+
+    def insert_male(self, enroll):
+        self.male.append(enroll)
+        print self.male
+
+    def insert_female(self, enroll):
+        self.female.append(enroll)
+        print self.female
+
+    def get_male(self):
+
+        if len(self.male) == 0:
+            data = 'wait'
+        else:
+            self.male.reverse()
+            data = self.male.pop()
+            self.male.reverse()
+        return data
+
+    def get_female(self):
+
+        if len(self.female) == 0:
+            data = 'wait'
+        else:
+            self.female.reverse()
+            data = self.female.pop()
+            self.female.reverse()
+        return data
