@@ -133,7 +133,8 @@
       <column name="gender" sqlType="VARCHAR(6)" precision="0" scale="-1" nullable="false" jdbcType="12"/>
       <column name="branch" sqlType="VARCHAR(20)" precision="0" scale="-1" nullable="false" jdbcType="12"/>
       <column name="college" sqlType="VARCHAR(20)" precision="0" scale="-1" nullable="false" jdbcType="12"/>
-      <column name="picture_id" sqlType="INTEGER" precision="0" scale="-1" nullable="false" jdbcType="4"/>
+      <column name="batch" sqlType="VARCHAR(4)" precision="0" scale="-1" nullable="false" jdbcType="12"/>
+      <column name="picture_id" sqlType="INTEGER" precision="0" scale="-1" nullable="true" jdbcType="4"/>
       <primary-key columns="id"/>
       <foreign-key name="#FAKE_icebreaker_backend_user_1" columns="picture_id" ref-table="icebreaker_backend_picture" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
       <index name="icebreaker_backend_user_c6fe9aa6" unique="true" columns="picture_id"/>

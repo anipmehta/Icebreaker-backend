@@ -1,10 +1,12 @@
 import json
 
+import datetime
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from gcm.models import get_device_model
 
 from icebreaker_backend.forms import UploadFileForm
+import time
 from icebreaker_backend.models import *
 
 
@@ -19,7 +21,7 @@ def testing(request):
         # print temp
         for my_phone in Device.objects.all():
             # my_phone.send_message({'title': 'Hello World','message': 'my test message'}, collapse_key='something')
-            record = {"name": my_phone.reg_id + my_phone.dev_id}
+            record = {"name": my_phone.reg_id + my_phone.dev_id+"dev_name "+my_phone.name}
             projects_donated.append(record)
             # print temp
             # print type(temp)
@@ -31,9 +33,11 @@ def send(request):
     if request.method == 'POST':
         body = json.loads(request.body)
         Device = get_device_model()
+        now = datetime.datetime.now()
+        millis = int(round(time.time() * 1000))
         if Device.objects.get(dev_id=body['to']) is not None:
             phone = Device.objects.get(dev_id=body['to'])
-            temp = phone.send_message({'title': body['from'], 'message': body['message'], 'id': '21'})
+            temp = phone.send_message({'title': body['from'], 'message': body['message'], 'id': '2'}, collapse_key = str(millis))
             print temp
             return JsonResponse({'status': 'true'})
         else:
@@ -108,17 +112,22 @@ def block_list(request):
 @csrf_exempt
 def random_chat(request):
     if request.method == 'POST':
+        Device = get_device_model()
         body = json.loads(request.body)
         random = Random()
         user = User.objects.get(enroll=body['enroll'])
-        print "kjjk"+user.gender
-        print type(user.gender)
         if str(user.gender) == 'male':
             data = random.get_female()
             if str(data) == 'wait':
                 random.insert_male(body['enroll'])
                 return JsonResponse({'status': data})
             else:
+                phone1 = Device.objects.get(dev_id=body['enroll'])
+                temp1 = phone1.send_message({'title': str(data), 'message': 'Hi, I want to chat with you', 'id': '21'})
+                # print temp1
+                phone2 = Device.objects.get(dev_id=data)
+                temp2 = phone2.send_message({'title': body['enroll'], 'message': 'Hi, I want to chat with you', 'id': '21'})
+                # print temp2
                 return JsonResponse({'status': data})
         elif str(user.gender) == 'female':
             data = random.get_male()
@@ -126,6 +135,12 @@ def random_chat(request):
                 random.insert_female(body['enroll'])
                 return JsonResponse({'status': data})
             else:
+                phone1 = Device.objects.get(dev_id=body['enroll'])
+                temp1 = phone1.send_message({'title': str(data), 'message': 'Hi, I want to chat with you', 'id': '21'})
+                # print temp1
+                phone2 = Device.objects.get(dev_id=data)
+                temp2 = phone2.send_message({'title': body['enroll'], 'message': 'Hi, I want to chat with you', 'id': '21'})
+                # print temp2
                 return JsonResponse({'status': data})
         else:
             return JsonResponse({'status': 'error'})

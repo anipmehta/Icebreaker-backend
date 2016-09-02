@@ -32,11 +32,17 @@ class Random():
         pass
 
     def insert_male(self, enroll):
-        self.male.append(enroll)
-        print self.male
+        if enroll in self.male:
+            print enroll
+        else:
+            self.male.append(enroll)
+            print self.male
 
     def insert_female(self, enroll):
-        self.female.append(enroll)
+        if enroll in self.female:
+            print enroll
+        else:
+            self.female.append(enroll)
         print self.female
 
     def get_male(self):
