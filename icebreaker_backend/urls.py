@@ -17,7 +17,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 
-from icebreaker_backend.views import testing, send, signup, block, block_list, random_chat
+from icebreaker_backend.views import testing, send, signup, block, block_list, random_chat, search
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -28,4 +28,5 @@ urlpatterns = [
     url(r'^block/',block,name='block'),
     url(r'^blockList/',block_list,name='block_list'),
     url(r'^random/',random_chat,name='random'),
+    url(r'^add/', search,name='random'),
 ]

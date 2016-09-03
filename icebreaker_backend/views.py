@@ -147,3 +147,18 @@ def random_chat(request):
 
     else:
         return JsonResponse({'status': 'error'})
+
+@csrf_exempt
+def search(request):
+    if request.method == 'POST':
+        Device = get_device_model()
+        body = json.loads(request.body)
+        if User.objects.filter(enroll=body['search']) and User.objects.filter(enroll=body['sender']):
+            contact = User.objects.get(enroll=body['search'])
+            user = User.objects.get(enroll=body['sender'])
+            user.contacts.add(contact.enroll)
+            return JsonResponse({'status': 'found'})
+        else:
+            return JsonResponse({'status': 'error'})
+    else:
+        return JsonResponse({'status': 'error'})
