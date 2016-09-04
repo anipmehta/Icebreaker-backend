@@ -1,6 +1,8 @@
 import json
 
 import datetime
+
+from django.db import IntegrityError
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from gcm.models import get_device_model
@@ -156,8 +158,12 @@ def search(request):
         if User.objects.filter(enroll=body['search']) and User.objects.filter(enroll=body['sender']):
             contact = User.objects.get(enroll=body['search'])
             user = User.objects.get(enroll=body['sender'])
-            user.contacts.add(contact.enroll)
-            return JsonResponse({'status': 'found'})
+            try:
+                user.contacts.add(contact.enroll)
+                return JsonResponse({'status': 'found'})
+            except IntegrityError:
+                return JsonResponse({'status':'already'})
+
         else:
             return JsonResponse({'status': 'error'})
     else:
