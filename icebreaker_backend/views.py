@@ -37,13 +37,14 @@ def send(request):
         Device = get_device_model()
         now = datetime.datetime.now()
         millis = int(round(time.time() * 1000))
-        if Device.objects.get(dev_id=body['to']) is not None:
-            phone = Device.objects.get(dev_id=body['to'])
+        try:
+            phone = Device.objects.get(name=body['to'])
             temp = phone.send_message({'title': body['from'], 'message': body['message'], 'id': '2'}, collapse_key = str(millis))
             print temp
             return JsonResponse({'status': 'true'})
-        else:
+        except Device.DoesNotExist:
             return JsonResponse({'status': 'false'})
+
 
 
 @csrf_exempt
