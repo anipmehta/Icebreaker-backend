@@ -23,7 +23,7 @@ def testing(request):
         # print temp
         for my_phone in Device.objects.all():
             # my_phone.send_message({'title': 'Hello World','message': 'my test message'}, collapse_key='something')
-            record = {"name": my_phone.reg_id + my_phone.dev_id+"dev_name "+my_phone.name}
+            record = {"name": my_phone.reg_id + my_phone.dev_id + "dev_name " + my_phone.name}
             projects_donated.append(record)
             # print temp
             # print type(temp)
@@ -39,12 +39,12 @@ def send(request):
         millis = int(round(time.time() * 1000))
         try:
             phone = Device.objects.get(name=body['to'])
-            temp = phone.send_message({'title': body['from'], 'message': body['message'], 'id': '2'}, collapse_key = str(millis))
+            temp = phone.send_message({'title': body['from'], 'message': body['message'], 'id': body['id'],'time' : body['time']},
+                                      collapse_key=str(millis))
             print temp
             return JsonResponse({'status': 'true'})
         except Device.DoesNotExist:
             return JsonResponse({'status': 'false'})
-
 
 
 @csrf_exempt
@@ -125,11 +125,12 @@ def random_chat(request):
                 random.insert_male(body['enroll'])
                 return JsonResponse({'status': data})
             else:
-                phone1 = Device.objects.get(dev_id=body['enroll'])
-                temp1 = phone1.send_message({'title': str(data), 'message': 'Hi, I want to chat with you', 'id': '21'})
+                # phone1 = Device.objects.get(name=body['enroll'])
+                # temp1 = phone1.send_message({'title': str(data), 'message': 'Hi, I want to chat with you', 'id': '21'})
                 # print temp1
-                phone2 = Device.objects.get(dev_id=data)
-                temp2 = phone2.send_message({'title': body['enroll'], 'message': 'Hi, I want to chat with you', 'id': '21'})
+                # phone2 = Device.objects.get(name=data)
+                # temp2 = phone2.send_message(
+                #     {'title': body['enroll'], 'message': 'Hi, I want to chat with you', 'id': '21'})
                 # print temp2
                 return JsonResponse({'status': data})
         elif str(user.gender) == 'female':
@@ -138,11 +139,12 @@ def random_chat(request):
                 random.insert_female(body['enroll'])
                 return JsonResponse({'status': data})
             else:
-                phone1 = Device.objects.get(dev_id=body['enroll'])
-                temp1 = phone1.send_message({'title': str(data), 'message': 'Hi, I want to chat with you', 'id': '21'})
+                # phone1 = Device.objects.get(name=body['enroll'])
+                # temp1 = phone1.send_message({'title': str(data), 'message': 'Hi, I want to chat with you', 'id': '21'})
                 # print temp1
-                phone2 = Device.objects.get(dev_id=data)
-                temp2 = phone2.send_message({'title': body['enroll'], 'message': 'Hi, I want to chat with you', 'id': '21'})
+                # phone2 = Device.objects.get(name=data)
+                # temp2 = phone2.send_message(
+                #     {'title': body['enroll'], 'message': 'Hi, I want to chat with you', 'id': '21'})
                 # print temp2
                 return JsonResponse({'status': data})
         else:
@@ -150,6 +152,7 @@ def random_chat(request):
 
     else:
         return JsonResponse({'status': 'error'})
+
 
 @csrf_exempt
 def search(request):
@@ -163,9 +166,41 @@ def search(request):
                 user.contacts.add(contact.enroll)
                 return JsonResponse({'status': 'found'})
             except IntegrityError:
-                return JsonResponse({'status':'already'})
+                return JsonResponse({'status': 'already'})
 
         else:
             return JsonResponse({'status': 'error'})
     else:
         return JsonResponse({'status': 'error'})
+
+
+@csrf_exempt
+def delivered(request):
+    if request.method == 'POST':
+        Device = get_device_model()
+        body = json.loads(request.body)
+        millis = int(round(time.time() * 1000))
+        try:
+            phone = Device.objects.get(name=body['to'])
+            temp = phone.send_message({'title': body['from'], 'message': True, 'id': body['id'], 'type': 'deliver'},
+                                      collapse_key=str(millis))
+        except Device.DoesNotExist:
+            return JsonResponse({'status': 'false'})
+
+    else:
+        return JsonResponse({'status': 'false'})
+
+
+@csrf_exempt
+def removeRandom(request):
+    if request.method == 'POST':
+        body = json.loads(request.body)
+        user = User.objects.get(enroll=body['enroll'])
+        random = Random()
+        if str(user.gender) == 'male':
+            random.slice_male(user.enroll)
+        elif str(user.gender) == 'female':
+            random.slice_female(user.enroll)
+        return JsonResponse({'status': 'true'})
+    else:
+        return JsonResponse({'status':'false'})

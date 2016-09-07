@@ -64,3 +64,11 @@ class Random():
             data = self.female.pop()
             self.female.reverse()
         return data
+
+    def slice_male(self, enroll):
+        if enroll in self.male:
+            self.male.remove(enroll)
+
+    def slice_female(self, enroll):
+        if enroll in self.female:
+            self.female.remove(enroll)
