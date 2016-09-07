@@ -39,7 +39,8 @@ def send(request):
         millis = int(round(time.time() * 1000))
         try:
             phone = Device.objects.get(name=body['to'])
-            temp = phone.send_message({'title': body['from'], 'message': body['message'], 'id': body['id'],'time' : body['time']},
+            temp = phone.send_message({'title': body['from'], 'message': body['message'], 'id': body['id'],'time' :
+                body['time'],'type': body['type']},
                                       collapse_key=str(millis))
             print temp
             return JsonResponse({'status': 'true'})
