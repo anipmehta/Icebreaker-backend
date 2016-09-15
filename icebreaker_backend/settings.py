@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'icebreaker_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'icebreaker_backend',
+        'NAME': 'icebreaker',
         'USER': 'admin_master',
         'PASSWORD': 'icebreaker',
         'HOST': 'localhost',
