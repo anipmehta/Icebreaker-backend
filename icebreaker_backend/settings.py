@@ -79,22 +79,15 @@ WSGI_APPLICATION = 'icebreaker_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'icebreaker',
+        'NAME': 'icebreaker_backend',
         'STORAGE_ENGINE': 'InnoDB',
-        'USER': 'admin_master',
-        'PASSWORD': 'icebreaker',
-        'HOST': 'localhost',
-        'PORT': '',
         'OPTIONS': {
-            # Tell MySQLdb to connect with 'utf8mb4' character set
-            'init_command': 'SET storage_engine=InnoDB',
-            'charset': 'utf8mb4',
+            'sql_mode': 'traditional',
         },
-        # Tell Django to build the test database with the 'utf8mb4' character set
-        'TEST': {
-            'CHARSET': 'utf8mb4',
-            'COLLATION': 'utf8mb4_unicode_ci',
-        }
+        'USER': 'admin_master',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': ''
     }
 }
 

@@ -5,5 +5,9 @@
     <data-source name="Django default" uuid="3e1a742c-5d1c-4753-a8ce-8e9157f8c4b4">
       <auth-required>false</auth-required>
     </data-source>
+    <data-source name="MySQL - icebreaker_backend@localhost" uuid="5b5dbc2e-dfa4-47a9-abb2-cd89e203bed1">
+      <secret-storage>master_key</secret-storage>
+      <user-name>admin_master</user-name>
+    </data-source>
   </component>
 </project>

@@ -163,9 +163,16 @@ def search(request):
         if User.objects.filter(enroll=body['search']) and User.objects.filter(enroll=body['sender']):
             contact = User.objects.get(enroll=body['search'])
             user = User.objects.get(enroll=body['sender'])
+            contact = Contacts(
+                enroll=contact.enroll
+            )
             try:
-                user.contacts.add(contact.enroll)
-                return JsonResponse({'status': 'found'})
+                if user.contacts.filter(enroll=contact.enroll).count() == 0:
+                    contact.save()
+                    user.contacts.add(contact)
+                    return JsonResponse({'status': 'found'})
+                else:
+                    return JsonResponse({'status' : 'already'})
             except IntegrityError:
                 return JsonResponse({'status': 'already'})
 

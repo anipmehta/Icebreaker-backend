@@ -21,7 +21,7 @@ class User(models.Model):
     batch = models.CharField(max_length=4, default="B7")
     picture = models.ForeignKey(Picture, null=True)
     blocked = models.ManyToManyField(Blocked, blank=True)
-    contacts = models.ManyToManyField(Contacts, blank=True)
+    contacts = models.ManyToManyField(Contacts)
 
 
 class Random():
