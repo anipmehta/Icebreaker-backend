@@ -1,3 +1,5 @@
+from __future__ import print_function
+from __future__ import print_function
 import json
 
 import datetime
@@ -6,7 +8,7 @@ from django.db import IntegrityError
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from gcm.models import get_device_model
-
+from django.http import HttpResponse
 from icebreaker_backend.forms import UploadFileForm
 import time
 from icebreaker_backend.models import *
@@ -39,10 +41,10 @@ def send(request):
         millis = int(round(time.time() * 1000))
         try:
             phone = Device.objects.get(name=body['to'])
-            temp = phone.send_message({'title': body['from'], 'message': body['message'], 'id': body['id'],'time':
-                body['time'],'type': body['type']},
+            temp = phone.send_message({'title': body['from'], 'message': body['message'], 'id': body['id'], 'time':
+                body['time'], 'type': body['type']},
                                       collapse_key=str(millis))
-            print temp
+            print(temp)
             return JsonResponse({'status': 'true'})
         except Device.DoesNotExist:
             return JsonResponse({'status': 'false'})
@@ -106,7 +108,7 @@ def block_list(request):
             blocked = []
             for block in user.blocked.all():
                 data = block.enroll
-                print block.enroll
+                print(block.enroll)
                 blocked.append(data)
             return JsonResponse({'blocked': blocked}, safe=False)
         else:
@@ -172,7 +174,7 @@ def search(request):
                     user.contacts.add(contact)
                     return JsonResponse({'status': 'found'})
                 else:
-                    return JsonResponse({'status' : 'already'})
+                    return JsonResponse({'status': 'already'})
             except IntegrityError:
                 return JsonResponse({'status': 'already'})
 
@@ -211,4 +213,46 @@ def removeRandom(request):
             random.slice_female(user.enroll)
         return JsonResponse({'status': 'true'})
     else:
-        return JsonResponse({'status':'false'})
+        return JsonResponse({'status': 'false'})
+
+
+@csrf_exempt
+def upload_pic(request, enroll):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            m = Picture()
+            m.picture = form.cleaned_data['picture']
+            m.save()
+            # print(str(m.picture.storage.url))
+            # print(m.picture.url)
+            # enroll = str(m.picture.url).replace("images/uploads/","")
+            # print(str(m.picture.path))
+            # enroll.replace(".png",""))
+            user = User.objects.get(enroll=enroll)
+            print(enroll)
+            # Picture.objects.get(picture=m.picture))
+            user.picture = Picture.objects.get(picture=m.picture)
+            # user.picture.save()
+            user.save()
+            return JsonResponse({"status": "true"}, safe=False)
+        else:
+            return JsonResponse({"status": "false"}, safe=False)
+
+
+@csrf_exempt
+def show_image(request, enroll):
+    if request.method == 'GET':
+        # body = json.loads(request.body)
+        # pic = Picture()
+        user = User.objects.get(enroll=enroll)
+
+        try:
+            image_data = open(user.picture.picture.url, "rb").read()
+        except:
+            if user.gender == 'male':
+                image_data = open("images/uploads/male.jpg")
+            else:
+                image_data = open("images/uploads/female.jpg")
+        return HttpResponse(image_data, content_type="image/png")
+        # return JsonResponse({"url":user.picture.picture.url})

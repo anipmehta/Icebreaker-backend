@@ -22,6 +22,7 @@ class User(models.Model):
     picture = models.ForeignKey(Picture, null=True)
     blocked = models.ManyToManyField(Blocked, blank=True)
     contacts = models.ManyToManyField(Contacts)
+    pic_url = models.CharField(max_length=200,null=True)
 
 
 class Random():

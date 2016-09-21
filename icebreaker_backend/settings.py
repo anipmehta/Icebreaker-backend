@@ -85,7 +85,7 @@ DATABASES = {
             'sql_mode': 'traditional',
         },
         'USER': 'admin_master',
-        'PASSWORD': 'password',
+        'PASSWORD': 'icebreaker',
         'HOST': 'localhost',
         'PORT': ''
     }
