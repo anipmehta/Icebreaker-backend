@@ -48,7 +48,7 @@ def send(request):
                 str(millis), 'type': body['type']},
                                       collapse_key=str(millis))
             # print(temp)
-            return JsonResponse({'status': 'true'})
+            return JsonResponse({'status': 'true','time':millis})
         except Device.DoesNotExist:
             return JsonResponse({'status': 'false'})
 
