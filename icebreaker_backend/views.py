@@ -17,6 +17,8 @@ from icebreaker_backend.models import *
 @csrf_exempt
 def testing(request):
     if request.method == 'POST':
+        milli_sec = int(round(time.time() * 1000))
+        print(milli_sec)
         Device = get_device_model()
         projects_donated = []
         # temp = Device.objects.all().send_message({'title': 'Hello Wolrd', 'message': 'my test message','notification':'hello'})
@@ -39,10 +41,11 @@ def send(request):
         Device = get_device_model()
         now = datetime.datetime.now()
         millis = int(round(time.time() * 1000))
+        print(millis)
         try:
             phone = Device.objects.get(name=body['to'])
             temp = phone.send_message({'title': body['from'], 'message': body['message'], 'id': body['id'], 'time':
-                body['time'], 'type': body['type']},
+                millis, 'type': body['type']},
                                       collapse_key=str(millis))
             # print(temp)
             return JsonResponse({'status': 'true'})
