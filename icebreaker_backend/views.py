@@ -44,21 +44,21 @@ def send(request):
             temp = phone.send_message({'title': body['from'], 'message': body['message'], 'id': body['id'], 'time':
                 body['time'], 'type': body['type']},
                                       collapse_key=str(millis))
-            print(temp)
+            # print(temp)
             return JsonResponse({'status': 'true'})
         except Device.DoesNotExist:
             return JsonResponse({'status': 'false'})
 
 
-@csrf_exempt
-def upload_pic(request):
-    if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            m = Picture()
-            m.picture = form.cleaned_data['picture']
-            m.save()
-            return JsonResponse({'status': 'image upload success'})
+# @csrf_exempt
+# def upload_pic(request):
+#     if request.method == 'POST':
+#         form = UploadFileForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             m = Picture()
+#             m.picture = form.cleaned_data['picture']
+#             m.save()
+#             return JsonResponse({'status': 'image upload success'})
 
 
 @csrf_exempt
@@ -230,7 +230,7 @@ def upload_pic(request, enroll):
             # print(str(m.picture.path))
             # enroll.replace(".png",""))
             user = User.objects.get(enroll=enroll)
-            print(enroll)
+            # print(enroll)
             # Picture.objects.get(picture=m.picture))
             user.picture = Picture.objects.get(picture=m.picture)
             # user.picture.save()
