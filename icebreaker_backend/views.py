@@ -143,7 +143,7 @@ def random_chat(request):
                 female.delete()
                 return JsonResponse({"status":"found","profile":None})
 
-            except:
+            except Random.DoesNotExist:
                 new_random = Random(enroll=user.enroll,
                                     gender=user.gender,
                                     time=milli_sec
@@ -169,7 +169,7 @@ def random_chat(request):
                     collapse_key=str(milli_sec))
                 male.delete()
                 return JsonResponse({"status": "found", "profile": None})
-            except:
+            except Random.DoesNotExist:
                 new_random = Random(enroll=user.enroll,
                                     gender=user.gender,
                                     time=milli_sec
