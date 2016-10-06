@@ -21,10 +21,7 @@ def testing(request):
         print(milli_sec)
         Device = get_device_model()
         projects_donated = []
-        # temp = Device.objects.all().send_message({'title': 'Hello Wolrd', 'message': 'my test message','notification':'hello'})
-        phone = Device.objects.get(dev_id='anip2')
-        # temp = phone.send_message({'title':'Hello Aditya','message': 'Hi From Anip','id': '25'}, collapse_key='something')
-        # print temp
+        # phone = Device.objects.get(dev_id='anip2')
         for my_phone in Device.objects.all():
             # my_phone.send_message({'title': 'Hello World','message': 'my test message'}, collapse_key='something')
             record = {"name": my_phone.reg_id + my_phone.dev_id + "dev_name " + my_phone.name}
@@ -41,14 +38,13 @@ def send(request):
         Device = get_device_model()
         now = datetime.datetime.now()
         millis = int(round(time.time() * 1000))
-        # print(millis)
         try:
             phone = Device.objects.get(name=body['to'])
             temp = phone.send_message({'title': body['from'], 'message': body['message'], 'id': body['id'], 'time':
                 str(millis), 'type': body['type']},
                                       collapse_key=str(millis))
             # print(temp)
-            return JsonResponse({'status': 'true','time':millis})
+            return JsonResponse({'status': 'true', 'time': millis})
         except Device.DoesNotExist:
             return JsonResponse({'status': 'false'})
 
@@ -123,41 +119,66 @@ def random_chat(request):
     if request.method == 'POST':
         Device = get_device_model()
         body = json.loads(request.body)
-        random = Random()
+        milli_sec = int(round(time.time() * 1000))
         user = User.objects.get(enroll=body['enroll'])
+        user_profile = {"id": user.pk, "enroll": user.enroll, "gender": user.gender, "branch": user.branch,
+                   "college": user.college, "batch": user.batch}
         if str(user.gender) == 'male':
-            data = random.get_female()
-            if str(data) == 'wait':
-                random.insert_male(body['enroll'])
-                return JsonResponse({'status': data})
-            else:
-                # phone1 = Device.objects.get(name=body['enroll'])
-                # temp1 = phone1.send_message({'title': str(data), 'message': 'Hi, I want to chat with you', 'id': '21'})
-                # print temp1
-                # phone2 = Device.objects.get(name=data)
-                # temp2 = phone2.send_message(
-                #     {'title': body['enroll'], 'message': 'Hi, I want to chat with you', 'id': '21'})
-                # print temp2
-                return JsonResponse({'status': data})
+            try:
+                female = Random.objects.filter(gender='female').order_by('time').first()
+                female_random = User.objects.get(enroll=female.enroll)
+                female_profile = {"id": female_random.pk, "enroll": female_random.enroll, "gender": female_random.gender,
+                           "branch": female_random.branch,
+                           "college": female_random.college, "batch": female_random.batch}
+
+                female_device = Device.objects.get(name=female_random.enroll)
+                female_device.send_message({'title': user.enroll, 'message': 'We have found a match for you!!', 'id': 2, 'time':
+                    str(milli_sec), 'type': 'random','profile' : user_profile},
+                                          collapse_key=str(milli_sec))
+                male_device = Device.objects.get(name=user.enroll)
+                male_device.send_message(
+                    {'title': female_random.enroll, 'message': 'We have found a match for you!!', 'id': 2, 'time':
+                        str(milli_sec), 'type': 'random', 'profile': female_profile},
+                    collapse_key=str(milli_sec))
+                female.delete()
+                return JsonResponse({"status":"found","profile":None})
+
+            except :
+                new_random = Random(enroll=user.enroll,
+                                    gender=user.gender,
+                                    time=milli_sec
+                                    )
+                new_random.save()
+                return JsonResponse({"status":"wait","profile":None})
         elif str(user.gender) == 'female':
-            data = random.get_male()
-            if str(data) == 'wait':
-                random.insert_female(body['enroll'])
-                return JsonResponse({'status': data})
-            else:
-                # phone1 = Device.objects.get(name=body['enroll'])
-                # temp1 = phone1.send_message({'title': str(data), 'message': 'Hi, I want to chat with you', 'id': '21'})
-                # print temp1
-                # phone2 = Device.objects.get(name=data)
-                # temp2 = phone2.send_message(
-                #     {'title': body['enroll'], 'message': 'Hi, I want to chat with you', 'id': '21'})
-                # print temp2
-                return JsonResponse({'status': data})
-        else:
-            return JsonResponse({'status': 'error'})
+            try:
+                male = Random.objects.filter(gender='male').order_by('time').first()
+                male_random = User.objects.get(enroll=male.enroll)
+                male_profile = {"id": male_random.pk, "enroll": male_random.enroll, "gender": male_random.gender,
+                           "branch": male_random.branch,
+                           "college": male_random.college, "batch": male_random.batch}
+                male_device = Device.objects.get(name=male_random.enroll)
+                male_device.send_message(
+                    {'title': user.enroll, 'message': 'We have found a match for you!!', 'id': 2, 'time':
+                        str(milli_sec), 'type': 'random', 'profile': user_profile},
+                    collapse_key=str(milli_sec))
+                female_device = Device.objects.get(name=user.enroll)
+                female_device.send_message(
+                    {'title': male_random.enroll, 'message': 'We have found a match for you!!', 'id': 2, 'time':
+                        str(milli_sec), 'type': 'random', 'profile': male_profile},
+                    collapse_key=str(milli_sec))
+                male.delete()
+                return JsonResponse({"status": "found", "profile": None})
+            except :
+                new_random = Random(enroll=user.enroll,
+                                    gender=user.gender,
+                                    time=milli_sec
+                                    )
+                new_random.save()
+                return JsonResponse({"status": "wait", "profile": None})
 
     else:
-        return JsonResponse({'status': 'error'})
+        return JsonResponse({"status": "error", "profile": None})
 
 
 @csrf_exempt
@@ -199,7 +220,7 @@ def delivered(request):
                                       collapse_key=str(millis))
         except Device.DoesNotExist:
             return JsonResponse({'status': 'false'})
-
+        return JsonResponse({'status': 'true'})
     else:
         return JsonResponse({'status': 'false'})
 
