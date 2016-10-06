@@ -137,7 +137,7 @@ def random_chat(request):
                                           collapse_key=str(milli_sec))
                 male_device = Device.objects.get(name=user.enroll)
                 male_device.send_message(
-                    {'title': user.enroll, 'message': 'We have found a match for you!!', 'id': 2, 'time':
+                    {'title': female_random.enroll, 'message': 'We have found a match for you!!', 'id': 2, 'time':
                         str(milli_sec), 'type': 'random', 'profile': female_profile},
                     collapse_key=str(milli_sec))
                 female.delete()
@@ -164,7 +164,7 @@ def random_chat(request):
                     collapse_key=str(milli_sec))
                 female_device = Device.objects.get(name=user.enroll)
                 female_device.send_message(
-                    {'title': user.enroll, 'message': 'We have found a match for you!!', 'id': 2, 'time':
+                    {'title': male_random.enroll, 'message': 'We have found a match for you!!', 'id': 2, 'time':
                         str(milli_sec), 'type': 'random', 'profile': male_profile},
                     collapse_key=str(milli_sec))
                 male.delete()
