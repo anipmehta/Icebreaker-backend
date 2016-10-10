@@ -64,24 +64,15 @@ def send(request):
 def signup(request):
     if request.method == 'POST':
         body = json.loads(request.body)
-        if User.objects.filter(enroll=body['enroll']).count() > 0:
-            user = User.objects.get(enroll=body['enroll'])
-            profile = {"id": user.pk, "enroll": user.enroll, "gender": user.gender, "branch": user.branch,
+        user = User.objects.get(enroll=body['enroll'])
+        user.gender = body['gender']
+        user.branch=body['branch']
+        user.college=body['college']
+        user.batch=body['batch']
+        user.save()
+        profile = {"id": user.pk, "enroll": user.enroll, "gender": user.gender, "branch": user.branch,
                        "college": user.college, "batch": user.batch}
-            return JsonResponse({"status": "User updated", "data": profile},
-                                safe=False)
-        else:
-            user = User(
-                enroll=body['enroll'],
-                gender=body['gender'],
-                branch=body['branch'],
-                college=body['college'],
-                batch=body['batch'],
-            )
-            user.save()
-            profile = {"id": user.pk, "enroll": user.enroll, "gender": user.gender, "branch": user.branch,
-                       "college": user.college, "batch": user.batch}
-            return JsonResponse({"status": "success", "data": profile})
+        return JsonResponse({"status": "created", "data": profile})
 
 
 @csrf_exempt
@@ -122,41 +113,43 @@ def random_chat(request):
         milli_sec = int(round(time.time() * 1000))
         user = User.objects.get(enroll=body['enroll'])
         user_profile = {"id": user.pk, "enroll": user.enroll, "gender": user.gender, "branch": user.branch,
-                   "college": user.college, "batch": user.batch}
+                        "college": user.college, "batch": user.batch}
         if str(user.gender) == 'male':
             try:
                 female = Random.objects.filter(gender='female').order_by('time').first()
                 female_random = User.objects.get(enroll=female.enroll)
-                female_profile = {"id": female_random.pk, "enroll": female_random.enroll, "gender": female_random.gender,
-                           "branch": female_random.branch,
-                           "college": female_random.college, "batch": female_random.batch}
+                female_profile = {"id": female_random.pk, "enroll": female_random.enroll,
+                                  "gender": female_random.gender,
+                                  "branch": female_random.branch,
+                                  "college": female_random.college, "batch": female_random.batch}
 
                 female_device = Device.objects.get(name=female_random.enroll)
-                female_device.send_message({'title': user.enroll, 'message': 'We have found a match for you!!', 'id': 2, 'time':
-                    str(milli_sec), 'type': 'random','profile' : user_profile},
-                                          collapse_key=str(milli_sec))
+                female_device.send_message(
+                    {'title': user.enroll, 'message': 'We have found a match for you!!', 'id': 2, 'time':
+                        str(milli_sec), 'type': 'random', 'profile': user_profile},
+                    collapse_key=str(milli_sec))
                 male_device = Device.objects.get(name=user.enroll)
                 male_device.send_message(
                     {'title': female_random.enroll, 'message': 'We have found a match for you!!', 'id': 2, 'time':
                         str(milli_sec), 'type': 'random', 'profile': female_profile},
                     collapse_key=str(milli_sec))
                 female.delete()
-                return JsonResponse({"status":"found","profile":None})
+                return JsonResponse({"status": "found", "profile": None})
 
-            except :
+            except:
                 new_random = Random(enroll=user.enroll,
                                     gender=user.gender,
                                     time=milli_sec
                                     )
                 new_random.save()
-                return JsonResponse({"status":"wait","profile":None})
+                return JsonResponse({"status": "wait", "profile": None})
         elif str(user.gender) == 'female':
             try:
                 male = Random.objects.filter(gender='male').order_by('time').first()
                 male_random = User.objects.get(enroll=male.enroll)
                 male_profile = {"id": male_random.pk, "enroll": male_random.enroll, "gender": male_random.gender,
-                           "branch": male_random.branch,
-                           "college": male_random.college, "batch": male_random.batch}
+                                "branch": male_random.branch,
+                                "college": male_random.college, "batch": male_random.batch}
                 male_device = Device.objects.get(name=male_random.enroll)
                 male_device.send_message(
                     {'title': user.enroll, 'message': 'We have found a match for you!!', 'id': 2, 'time':
@@ -169,7 +162,7 @@ def random_chat(request):
                     collapse_key=str(milli_sec))
                 male.delete()
                 return JsonResponse({"status": "found", "profile": None})
-            except :
+            except:
                 new_random = Random(enroll=user.enroll,
                                     gender=user.gender,
                                     time=milli_sec
@@ -280,3 +273,23 @@ def show_image(request, enroll):
                 image_data = open("images/uploads/female.jpg")
         return HttpResponse(image_data, content_type="image/png")
         # return JsonResponse({"url":user.picture.picture.url})
+
+
+@csrf_exempt
+def verify(request):
+    if request.method == 'POST':
+        body = json.loads(request.body)
+        if User.objects.filter(enroll=body['enroll']).count() > 0:
+            user = User.objects.get(enroll=body['enroll'])
+            profile = {"id": user.pk, "enroll": user.enroll, "gender": user.gender, "branch": user.branch,
+                       "college": user.college, "batch": user.batch}
+            return JsonResponse({"status": "exist", "data": profile},
+                                safe=False)
+        else:
+            user = User(
+                enroll=body['enroll']
+            )
+            user.save()
+            return JsonResponse({"status": "created"})
+    else:
+        return JsonResponse({'status': 'error'})
