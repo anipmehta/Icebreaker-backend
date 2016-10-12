@@ -18,7 +18,7 @@ from django.contrib import admin
 
 
 from icebreaker_backend.views import testing, send, signup, block, block_list, random_chat, search, removeRandom, \
-    delivered, upload_pic, show_image, verify
+    delivered, upload_pic, show_image, verify, edit
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -35,4 +35,5 @@ urlpatterns = [
     url(r'^upload/(?P<enroll>\w{0,50})/', upload_pic,name='upload'),
     url(r'^image/(?P<enroll>\w{0,50})', show_image,name='upload'),
     url(r'^verify/', verify,name='verify'),
+    url(r'^edit/', edit,name='edit')
 ]

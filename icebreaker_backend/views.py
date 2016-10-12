@@ -66,12 +66,15 @@ def signup(request):
         body = json.loads(request.body)
         user = User.objects.get(enroll=body['enroll'])
         user.gender = body['gender']
-        user.branch=body['branch']
-        user.college=body['college']
-        user.batch=body['batch']
+        user.branch = body['branch']
+        user.college = body['college']
+        user.batch = body['batch']
         user.save()
+        contacts = []
+        for contact in user.contacts.all():
+            contacts.append(contact.enroll)
         profile = {"id": user.pk, "enroll": user.enroll, "gender": user.gender, "branch": user.branch,
-                       "college": user.college, "batch": user.batch}
+                   "college": user.college, "batch": user.batch,"contacts":contacts}
         return JsonResponse({"status": "created", "data": profile})
 
 
@@ -189,7 +192,7 @@ def search(request):
                 if user.contacts.filter(enroll=contact.enroll).count() == 0:
                     contact.save()
                     user.contacts.add(contact)
-                    return JsonResponse({'status': 'found'})
+                    return JsonResponse({'status': 'found', 'user_status': user.status})
                 else:
                     return JsonResponse({'status': 'already'})
             except IntegrityError:
@@ -281,8 +284,11 @@ def verify(request):
         body = json.loads(request.body)
         if User.objects.filter(enroll=body['enroll']).count() > 0:
             user = User.objects.get(enroll=body['enroll'])
+            contacts = []
+            for contact in user.contacts.all():
+                contacts.append(contact.enroll)
             profile = {"id": user.pk, "enroll": user.enroll, "gender": user.gender, "branch": user.branch,
-                       "college": user.college, "batch": user.batch}
+                       "college": user.college, "batch": user.batch,'contacts':contacts}
             return JsonResponse({"status": "exist", "data": profile},
                                 safe=False)
         else:
@@ -293,3 +299,20 @@ def verify(request):
             return JsonResponse({"status": "created"})
     else:
         return JsonResponse({'status': 'error'})
+
+
+@csrf_exempt
+def edit(request):
+    if request.method == 'POST':
+        body = json.loads(request.body)
+        try:
+            user = User.objects.get(enroll=body['enroll'])
+        except:
+            return JsonResponse({'status': 'false'})
+        user.gender = body['gender']
+        user.branch = body['branch']
+        user.college = body['college']
+        user.batch = body['batch']
+        user.status = body['status']
+        user.save()
+        return JsonResponse({'status': 'true'})
