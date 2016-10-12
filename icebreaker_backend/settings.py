@@ -79,15 +79,15 @@ WSGI_APPLICATION = 'icebreaker_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'icebreaker_backend',
+        'NAME': 'icebreaker',
         'STORAGE_ENGINE': 'InnoDB',
         'OPTIONS': {
             'sql_mode': 'traditional',
         },
         'USER': 'admin_master',
-        'PASSWORD': 'password',
-        'HOST': '127.0.0.1',
-        'PORT': '3306'
+        'PASSWORD': 'icebreaker',
+        'HOST': 'localhost',
+        'PORT': ''
     }
 }
 
