@@ -23,6 +23,7 @@ class User(models.Model):
     blocked = models.ManyToManyField(Blocked, blank=True)
     contacts = models.ManyToManyField(Contacts)
     pic_url = models.CharField(max_length=200,null=True)
+    status = models.CharField(max_length=200,null=True, default="Hey there! I am using icebreaker.")
 
 
 class Random(models.Model):
