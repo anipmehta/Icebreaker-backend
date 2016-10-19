@@ -1,9 +1,7 @@
 from __future__ import print_function
 from __future__ import print_function
 import json
-
 import datetime
-
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -47,18 +45,6 @@ def send(request):
             return JsonResponse({'status': 'true', 'time': millis})
         except Device.DoesNotExist:
             return JsonResponse({'status': 'false'})
-
-
-# @csrf_exempt
-# def upload_pic(request):
-#     if request.method == 'POST':
-#         form = UploadFileForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             m = Picture()
-#             m.picture = form.cleaned_data['picture']
-#             m.save()
-#             return JsonResponse({'status': 'image upload success'})
-
 
 @csrf_exempt
 def signup(request):
@@ -180,19 +166,20 @@ def random_chat(request):
 @csrf_exempt
 def search(request):
     if request.method == 'POST':
-        Device = get_device_model()
         body = json.loads(request.body)
         if User.objects.filter(enroll=body['search']) and User.objects.filter(enroll=body['sender']):
-            contact = User.objects.get(enroll=body['search'])
+            contact_user = User.objects.get(enroll=body['search'])
             user = User.objects.get(enroll=body['sender'])
             contact = Contacts(
-                enroll=contact.enroll
+                enroll=contact_user.enroll
             )
             try:
                 if user.contacts.filter(enroll=contact.enroll).count() == 0:
                     contact.save()
                     user.contacts.add(contact)
-                    return JsonResponse({'status': 'found', 'user_status': user.status})
+                    profile = {"id": contact_user.pk, "enroll": contact_user.enroll, "gender": contact_user.gender, "branch": contact_user.branch,
+                               "college": contact_user.college, "batch": contact_user.batch, "status":contact_user.status}
+                    return JsonResponse({'status': 'found', 'contact_status': contact_user.status,'profile' : profile})
                 else:
                     return JsonResponse({'status': 'already'})
             except IntegrityError:
