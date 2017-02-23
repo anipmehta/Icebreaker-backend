@@ -129,3 +129,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 GCM_APIKEY = 'AIzaSyAtKQnI9ACFKeONYfo0nC5OuyW8neMe4J0'
 STATIC_URL = '/static/'
+
+STATIC_ROOT = BASE_DIR+'/static/'
+PROJECT_DIR = os.path.dirname(__file__)
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
+MEDIA_URL = '/images/'
+
+
