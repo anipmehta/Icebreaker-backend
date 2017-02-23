@@ -46,6 +46,7 @@ def send(request):
         except Device.DoesNotExist:
             return JsonResponse({'status': 'false'})
 
+
 @csrf_exempt
 def signup(request):
     if request.method == 'POST':
@@ -60,7 +61,7 @@ def signup(request):
         for contact in user.contacts.all():
             contacts.append(contact.enroll)
         profile = {"id": user.pk, "enroll": user.enroll, "gender": user.gender, "branch": user.branch,
-                   "college": user.college, "batch": user.batch,"contacts":contacts}
+                   "college": user.college, "batch": user.batch, "contacts": contacts}
         return JsonResponse({"status": "created", "data": profile})
 
 
@@ -103,7 +104,7 @@ def random_chat(request):
         user = User.objects.get(enroll=body['enroll'])
         user_profile = {"id": user.pk, "enroll": user.enroll, "gender": user.gender, "branch": user.branch,
                         "college": user.college, "batch": user.batch}
-        if str(user.gender) == 'male' and Random.objects.filter(enroll=user.enroll).count()==0:
+        if str(user.gender) == 'male' and Random.objects.filter(enroll=user.enroll).count() == 0:
             try:
                 female = Random.objects.filter(gender='female').order_by('time').first()
                 female_random = User.objects.get(enroll=female.enroll)
@@ -125,14 +126,14 @@ def random_chat(request):
                 female.delete()
                 return JsonResponse({"status": "found", "profile": None})
 
-            except:
+            except :
                 new_random = Random(enroll=user.enroll,
                                     gender=user.gender,
                                     time=milli_sec
                                     )
                 new_random.save()
                 return JsonResponse({"status": "wait", "profile": None})
-        elif str(user.gender) == 'female' and Random.objects.filter(enroll=user.enroll).count()==0:
+        elif str(user.gender) == 'female' and Random.objects.filter(enroll=user.enroll).count() == 0:
             try:
                 male = Random.objects.filter(gender='male').order_by('time').first()
                 male_random = User.objects.get(enroll=male.enroll)
@@ -158,9 +159,10 @@ def random_chat(request):
                                     )
                 new_random.save()
                 return JsonResponse({"status": "wait", "profile": None})
-
+        else:
+            return JsonResponse({"status": "Already in queue", "profile": None})
     else:
-        return JsonResponse({"status": "Already in queue", "profile": None})
+        return JsonResponse({"status": "Bad Request", "profile": None})
 
 
 @csrf_exempt
@@ -177,9 +179,11 @@ def search(request):
                 if user.contacts.filter(enroll=contact.enroll).count() == 0:
                     contact.save()
                     user.contacts.add(contact)
-                    profile = {"id": contact_user.pk, "enroll": contact_user.enroll, "gender": contact_user.gender, "branch": contact_user.branch,
-                               "college": contact_user.college, "batch": contact_user.batch, "status":contact_user.status}
-                    return JsonResponse({'status': 'found', 'contact_status': contact_user.status,'profile' : profile})
+                    profile = {"id": contact_user.pk, "enroll": contact_user.enroll, "gender": contact_user.gender,
+                               "branch": contact_user.branch,
+                               "college": contact_user.college, "batch": contact_user.batch,
+                               "status": contact_user.status}
+                    return JsonResponse({'status': 'found', 'contact_status': contact_user.status, 'profile': profile})
                 else:
                     return JsonResponse({'status': 'already'})
             except IntegrityError:
@@ -275,7 +279,7 @@ def verify(request):
             for contact in user.contacts.all():
                 contacts.append(contact.enroll)
             profile = {"id": user.pk, "enroll": user.enroll, "gender": user.gender, "branch": user.branch,
-                       "college": user.college, "batch": user.batch,'contacts':contacts}
+                       "college": user.college, "batch": user.batch, 'contacts': contacts}
             return JsonResponse({"status": "exist", "data": profile},
                                 safe=False)
         else:
