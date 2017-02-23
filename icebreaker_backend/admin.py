@@ -4,8 +4,7 @@ from icebreaker_backend.models import User, Random, Picture, Contacts, Blocked
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('enroll', 'gender', 'branch', 'college', 'batch', 'picture', 'blocked', 'contacts', 'pic_url',
-                    'status')
+    list_display = ('enroll', 'gender', 'branch', 'college', 'batch', 'pic_url', 'status')
 
 
 class PictureAdmin(admin.ModelAdmin):
@@ -17,7 +16,7 @@ class ContactAdmin(admin.ModelAdmin):
 
 
 class BlockedAdmin(admin.ModelAdmin):
-    list_display = ('enroll')
+    list_display = 'enroll'
 
 
 class RandomAdmin(admin.ModelAdmin):
