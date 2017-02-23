@@ -103,7 +103,7 @@ def random_chat(request):
         user = User.objects.get(enroll=body['enroll'])
         user_profile = {"id": user.pk, "enroll": user.enroll, "gender": user.gender, "branch": user.branch,
                         "college": user.college, "batch": user.batch}
-        if str(user.gender) == 'male':
+        if str(user.gender) == 'male' and Random.objects.filter(enroll=user.enroll).count()==0:
             try:
                 female = Random.objects.filter(gender='female').order_by('time').first()
                 female_random = User.objects.get(enroll=female.enroll)
@@ -132,7 +132,7 @@ def random_chat(request):
                                     )
                 new_random.save()
                 return JsonResponse({"status": "wait", "profile": None})
-        elif str(user.gender) == 'female':
+        elif str(user.gender) == 'female' and Random.objects.filter(enroll=user.enroll).count()==0:
             try:
                 male = Random.objects.filter(gender='male').order_by('time').first()
                 male_random = User.objects.get(enroll=male.enroll)
@@ -160,7 +160,7 @@ def random_chat(request):
                 return JsonResponse({"status": "wait", "profile": None})
 
     else:
-        return JsonResponse({"status": "error", "profile": None})
+        return JsonResponse({"status": "Already in queue", "profile": None})
 
 
 @csrf_exempt

@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="dataSourceStorage">
   <data-source name="db" uuid="c5f5a572-dcef-41dc-b7de-6387a9d8e9ba">
-    <database-info product="SQLite" version="3.8.11" jdbc-version="2.1" driver-name="SQLiteJDBC" driver-version="native"/>
-    <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed"/>
-    <schema name="" catalog=""/>
+    <database-info product="" version="" jdbc-version="" driver-name="" driver-version=""/>
   </data-source>
   <data-source name="Django default" uuid="3e1a742c-5d1c-4753-a8ce-8e9157f8c4b4">
     <database-info product="" version="" jdbc-version="" driver-name="" driver-version=""/>
@@ -548,97 +546,100 @@ model</columns>
       <column id="136" parent="17" name="pic_url">
         <data-type>varchar(200)</data-type>
       </column>
-      <index id="137" parent="17" name="icebreaker__picture_id_41048b88_fk_icebreaker_backend_picture_id">
+      <column id="137" parent="17" name="status">
+        <data-type>varchar(200)</data-type>
+      </column>
+      <index id="138" parent="17" name="icebreaker__picture_id_41048b88_fk_icebreaker_backend_picture_id">
         <columns>picture_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <key id="138" parent="17" name="PRIMARY">
+      <key id="139" parent="17" name="PRIMARY">
         <columns>id</columns>
         <primary>1</primary>
       </key>
-      <column id="139" parent="18" name="id">
+      <column id="140" parent="18" name="id">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="140" parent="18" name="user_id">
+      <column id="141" parent="18" name="user_id">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <column id="141" parent="18" name="blocked_id">
+      <column id="142" parent="18" name="blocked_id">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <index id="142" parent="18" name="icebreaker_backend_user_blocked_user_id_a7127df1_uniq">
+      <index id="143" parent="18" name="icebreaker_backend_user_blocked_user_id_a7127df1_uniq">
         <columns>user_id
 blocked_id</columns>
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <index id="143" parent="18" name="icebreaker__blocked_id_37ee4cf8_fk_icebreaker_backend_blocked_id">
+      <index id="144" parent="18" name="icebreaker__blocked_id_37ee4cf8_fk_icebreaker_backend_blocked_id">
         <columns>blocked_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <key id="144" parent="18" name="icebreaker_backend_user_blocked_user_id_a7127df1_uniq">
+      <key id="145" parent="18" name="icebreaker_backend_user_blocked_user_id_a7127df1_uniq">
         <columns>user_id
 blocked_id</columns>
         <underlying-index>icebreaker_backend_user_blocked_user_id_a7127df1_uniq</underlying-index>
       </key>
-      <key id="145" parent="18" name="PRIMARY">
+      <key id="146" parent="18" name="PRIMARY">
         <columns>id</columns>
         <primary>1</primary>
       </key>
-      <foreign-key id="146" parent="18" name="icebreaker_backen_user_id_9220c0a2_fk_icebreaker_backend_user_id">
+      <foreign-key id="147" parent="18" name="icebreaker_backen_user_id_9220c0a2_fk_icebreaker_backend_user_id">
         <columns>user_id</columns>
         <ref-key>~.icebreaker_backend_user.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="147" parent="18" name="icebreaker__blocked_id_37ee4cf8_fk_icebreaker_backend_blocked_id">
+      <foreign-key id="148" parent="18" name="icebreaker__blocked_id_37ee4cf8_fk_icebreaker_backend_blocked_id">
         <columns>blocked_id</columns>
         <ref-key>~.icebreaker_backend_blocked.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <column id="148" parent="19" name="id">
+      <column id="149" parent="19" name="id">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
         <sequence-identity>1</sequence-identity>
       </column>
-      <column id="149" parent="19" name="user_id">
+      <column id="150" parent="19" name="user_id">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <column id="150" parent="19" name="contacts_id">
+      <column id="151" parent="19" name="contacts_id">
         <mandatory>1</mandatory>
         <data-type>int(11)</data-type>
       </column>
-      <index id="151" parent="19" name="icebreaker_backend_user_contacts_user_id_f2b3b8f2_uniq">
+      <index id="152" parent="19" name="icebreaker_backend_user_contacts_user_id_f2b3b8f2_uniq">
         <columns>user_id
 contacts_id</columns>
         <desc-columns></desc-columns>
         <unique>1</unique>
       </index>
-      <index id="152" parent="19" name="icebreake_contacts_id_8de0ada6_fk_icebreaker_backend_contacts_id">
+      <index id="153" parent="19" name="icebreake_contacts_id_8de0ada6_fk_icebreaker_backend_contacts_id">
         <columns>contacts_id</columns>
         <desc-columns></desc-columns>
       </index>
-      <key id="153" parent="19" name="icebreaker_backend_user_contacts_user_id_f2b3b8f2_uniq">
+      <key id="154" parent="19" name="icebreaker_backend_user_contacts_user_id_f2b3b8f2_uniq">
         <columns>user_id
 contacts_id</columns>
         <underlying-index>icebreaker_backend_user_contacts_user_id_f2b3b8f2_uniq</underlying-index>
       </key>
-      <key id="154" parent="19" name="PRIMARY">
+      <key id="155" parent="19" name="PRIMARY">
         <columns>id</columns>
         <primary>1</primary>
       </key>
-      <foreign-key id="155" parent="19" name="icebreaker_backen_user_id_0b99b3a8_fk_icebreaker_backend_user_id">
+      <foreign-key id="156" parent="19" name="icebreaker_backen_user_id_0b99b3a8_fk_icebreaker_backend_user_id">
         <columns>user_id</columns>
         <ref-key>~.icebreaker_backend_user.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
         <cascade-delete-rule>restrict</cascade-delete-rule>
       </foreign-key>
-      <foreign-key id="156" parent="19" name="icebreake_contacts_id_8de0ada6_fk_icebreaker_backend_contacts_id">
+      <foreign-key id="157" parent="19" name="icebreake_contacts_id_8de0ada6_fk_icebreaker_backend_contacts_id">
         <columns>contacts_id</columns>
         <ref-key>~.icebreaker_backend_contacts.PRIMARY</ref-key>
         <cascade-update-rule>restrict</cascade-update-rule>
