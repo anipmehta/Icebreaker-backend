@@ -130,7 +130,7 @@ USE_TZ = True
 GCM_APIKEY = 'AIzaSyAtKQnI9ACFKeONYfo0nC5OuyW8neMe4J0'
 STATIC_URL = '/static/'
 
-STATIC_ROOT = BASE_DIR+'/static/'
+STATIC_ROOT = BASE_DIR+'icebreaker_backend/static/'
 PROJECT_DIR = os.path.dirname(__file__)
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
